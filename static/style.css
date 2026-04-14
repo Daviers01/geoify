@@ -1,0 +1,170 @@
+/* ── Drop Zone ─────────────────────────────────────────── */
+#drop-zone {
+  border: 2px dashed #6c757d;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+}
+
+#drop-zone:hover {
+  border-color: #0d6efd;
+  background-color: #f0f5ff;
+}
+
+#drop-zone.drag-over {
+  border-color: #0d6efd;
+  background-color: #e7f1ff;
+  border-style: solid;
+}
+
+#drop-zone .upload-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #6c757d;
+}
+
+#drop-zone p {
+  margin: 0;
+  color: #6c757d;
+}
+
+#drop-zone .browse-link {
+  color: #0d6efd;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ── Image Preview ─────────────────────────────────────── */
+#preview-container {
+  margin-top: 1rem;
+}
+
+#preview-img {
+  max-width: 100%;
+  max-height: 260px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+#file-info {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-top: 0.4rem;
+}
+
+/* ── Leaflet / Bootstrap conflict fix ──────────────────── */
+/* Without this, map tiles render broken inside Bootstrap */
+#map img {
+  max-width: none;
+}
+
+/* ── Map ───────────────────────────────────────────────── */
+#map {
+  height: 320px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  cursor: crosshair;
+  margin-top: 0.75rem;
+}
+
+/* ── Coordinate Inputs ─────────────────────────────────── */
+.coord-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #495057;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Action Bar ────────────────────────────────────────── */
+#action-bar {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+#geotag-btn {
+  padding: 0.65rem 2.5rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+/* ── Status Alerts ─────────────────────────────────────── */
+#status-area {
+  margin-top: 1rem;
+}
+
+/* ── Header ────────────────────────────────────────────── */
+header {
+  background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+  color: #fff;
+  padding: 1.25rem 0;
+  margin-bottom: 2rem;
+}
+
+header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+header p {
+  margin: 0.2rem 0 0;
+  opacity: 0.85;
+  font-size: 0.95rem;
+}
+
+/* ── Section Cards ─────────────────────────────────────── */
+.section-card {
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  padding: 1.5rem;
+  height: 100%;
+}
+
+.section-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #495057;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+/* ── Spinner ───────────────────────────────────────────── */
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15em;
+}
+
+/* ── Map hint ──────────────────────────────────────────── */
+.map-hint {
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin-top: 0.35rem;
+}
+
+/* ── Responsive tweaks ─────────────────────────────────── */
+@media (max-width: 991px) {
+  #map {
+    height: 260px;
+  }
+
+  .section-card {
+    margin-bottom: 1rem;
+  }
+}
