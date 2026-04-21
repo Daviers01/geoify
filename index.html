@@ -3,7 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Image Geotagger</title>
+  <title>Geoify — Free Image Geotagging Tool</title>
+  <meta name="description" content="Geotag images online for free — embed GPS coordinates into JPEG EXIF metadata. No account. No watermarks. 100% browser-based." />
+  <meta name="robots" content="index, follow" />
+  <meta name="google-site-verification" content="IfwXzIPV4_Pc59zwH6n7RIDQqZV1eYPA5fnpAogpXbQ" />
+  <link rel="canonical" href="https://geoify.vercel.app/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Geoify — Free Image Geotagging Tool" />
+  <meta property="og:description" content="Free image geotagging tool. Embed GPS coordinates into EXIF metadata. No account. No watermarks. 100% browser-based." />
+  <meta property="og:url" content="https://geoify.vercel.app/" />
+  <meta property="og:site_name" content="Geoify" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Geoify — Free Image Geotagging Tool" />
+  <meta name="twitter:description" content="Free image geotagging tool. Embed GPS coordinates into JPEG EXIF metadata. No account. No watermarks." />
+
+  <!-- JSON-LD: WebApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Geoify",
+    "url": "https://geoify.vercel.app/",
+    "description": "Free online image geotagging tool. Embed GPS coordinates into JPEG EXIF metadata. 100% browser-based — images never leave your device.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Embed GPS EXIF metadata into JPEG images",
+      "Batch image geotagging",
+      "Custom filename per image",
+      "100% browser-based — images never leave your device"
+    ],
+    "creator": {
+      "@type": "Organization",
+      "name": "Geoify",
+      "url": "https://geoify.vercel.app/"
+    }
+  }
+  </script>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FJ555KQY0J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-FJ555KQY0J');
+  </script>
+
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <!-- Bootstrap 5 -->
   <link
@@ -14,62 +74,152 @@
   />
 
   <!-- Leaflet CSS -->
-  <link
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    rel="stylesheet"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin="anonymous"
-  />
+  <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" />
 
   <!-- Custom styles -->
   <link href="static/style.css" rel="stylesheet" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
-<body class="bg-light">
+<body>
 
   <!-- ── Header ──────────────────────────────────────────────────────────── -->
   <header>
     <div class="container">
-      <h1>Image Geotagger</h1>
-      <p>Embed GPS coordinates into any image and download the geotagged file.</p>
+      <div class="header-inner">
+
+        <div class="header-brand">
+          <div class="header-logo-row">
+            <span class="header-pin"><i data-lucide="map-pin"></i></span>
+            <h1>Geoify: Free Image Geotagging Tool</h1>
+            <span class="badge-free">FREE</span>
+          </div>
+          <p class="header-tagline">Embed GPS coordinates into JPEG EXIF metadata — free, private, and 100% browser-based.</p>
+          <p class="header-sub">
+            No subscription &nbsp;&middot;&nbsp; No account &nbsp;&middot;&nbsp;
+            No watermarks &nbsp;&middot;&nbsp; Your images never leave your browser
+          </p>
+        </div>
+
+        <div class="header-cta">
+          <script
+            type="text/javascript"
+            src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js"
+            data-name="bmc-button"
+            data-slug="KBEIsYq"
+            data-color="#FFDD00"
+            data-emoji="☕"
+            data-font="Cookie"
+            data-text="Buy me a coffee"
+            data-outline-color="#000000"
+            data-font-color="#000000"
+            data-coffee-color="#ffffff"
+          ></script>
+        </div>
+
+      </div>
     </div>
   </header>
 
   <!-- ── Main ────────────────────────────────────────────────────────────── -->
   <main class="container pb-5">
+<!-- ── How to Use ────────────────────────────────────────────────────── -->
+    <section class="how-section my-5">
+      <div class="text-center mb-4">
+        <h2 class="section-heading">How to Geotag Images</h2>
+        <p class="text-muted small mb-0">Four simple steps from upload to geotagged download.</p>
+      </div>
+      <div class="how-steps">
 
+        <div class="how-step">
+          <!-- <div class="how-step-icon"><i data-lucide="upload-cloud"></i></div> -->
+          <div class="how-step-num mb-4">1</div>
+          <h3 class="how-step-title mb-2">Upload Images</h3>
+          <p class="how-step-desc">
+            Drag &amp; drop or browse to add one or multiple images.
+            JPEG, PNG, WebP, GIF and BMP are all accepted — all are converted to JPEG on download.
+          </p>
+        </div>
+
+        <div class="how-step-arrow"><i data-lucide="arrow-right"></i></div>
+
+        <div class="how-step">
+          <!-- <div class="how-step-icon"><i data-lucide="map-pin"></i></div> -->
+          <div class="how-step-num mb-4">2</div>
+          <h3 class="how-step-title mb-2">Pin Your Location</h3>
+          <p class="how-step-desc">
+            Click the map, tap "Use My Location", or type your
+            latitude and longitude. These GPS coordinates get
+            embedded into the EXIF metadata of every image.
+          </p>
+        </div>
+
+        <div class="how-step-arrow"><i data-lucide="arrow-right"></i></div>
+
+        <div class="how-step">
+          <!-- <div class="how-step-icon"><i data-lucide="sliders-horizontal"></i></div> -->
+          <div class="how-step-num mb-4">3</div>
+          <h3 class="how-step-title mb-2">Set Filename</h3>
+          <p class="how-step-desc">
+            Optionally set a custom filename for each image.
+            All images download as <strong>JPEG</strong> — the only format that supports embedded GPS data.
+          </p>
+        </div>
+
+        <div class="how-step-arrow"><i data-lucide="arrow-right"></i></div>
+
+        <div class="how-step">
+          <!-- <div class="how-step-icon"><i data-lucide="send"></i></div> -->
+          <div class="how-step-num mb-4">4</div>
+          <h3 class="how-step-title mb-2">Download</h3>
+          <p class="how-step-desc">
+            Download your geotagged JPEG files individually or all at once.
+            GPS coordinates are embedded in the EXIF metadata and travel with the image.
+          </p>
+        </div>
+
+      </div>
+    </section>
     <div class="row g-4">
 
-      <!-- ── LEFT: Upload & Preview ───────────────────────────────────────── -->
+      <!-- ── LEFT: Upload & Queue ─────────────────────────────────────────── -->
       <div class="col-lg-6">
         <div class="section-card">
-          <div class="section-title">1 &nbsp;Upload Image</div>
+          <div class="section-title">
+            <span class="step-num">1</span>
+            Upload Images
+          </div>
 
-          <!-- Drop zone -->
           <div
             id="drop-zone"
             role="button"
             tabindex="0"
-            aria-label="Upload image — click or drag and drop"
+            aria-label="Upload images — click or drag and drop"
           >
-            <div class="upload-icon">&#128444;&#65039;</div>
-            <p class="fw-semibold mb-1">Drag &amp; drop an image here</p>
-            <p class="small">or <span class="browse-link">browse files</span></p>
-            <p class="small text-muted mt-1">JPEG, PNG, WebP, GIF, BMP supported</p>
+            <div class="upload-icon"><i data-lucide="upload-cloud"></i></div>
+            <p class="fw-semibold mb-1">Drag &amp; drop images here</p>
+            <p class="small mb-0">or <span class="browse-link">browse files</span></p>
+            <p class="small text-muted mt-1 mb-0">JPEG, PNG, WebP, GIF, BMP accepted &nbsp;&middot;&nbsp; All exported as JPEG with GPS EXIF</p>
           </div>
 
-          <!-- Hidden file input -->
           <input
             id="file-input"
             type="file"
             accept="image/*"
-            class="d-none"
+            multiple
+            class="file-input-hidden"
             aria-hidden="true"
+            tabindex="-1"
           />
 
-          <!-- Preview -->
-          <div id="preview-container" class="d-none text-center">
-            <img id="preview-img" alt="Uploaded image preview" />
-            <p id="file-info" class="text-muted"></p>
+          <div class="d-flex justify-content-between align-items-center mt-3 mb-2">
+            <span class="section-label">Uploaded images</span>
+            <span id="queue-count" class="text-muted small"></span>
+          </div>
+
+          <div id="image-queue">
+            <p class="text-muted small text-center py-2 mb-0">No images uploaded yet.</p>
           </div>
         </div>
       </div>
@@ -77,10 +227,13 @@
       <!-- ── RIGHT: Coordinates & Map ─────────────────────────────────────── -->
       <div class="col-lg-6">
         <div class="section-card">
-          <div class="section-title">2 &nbsp;Set GPS Coordinates</div>
+          <div class="section-title">
+            <span class="step-num">2</span>
+            Pin Your Location
+          </div>
+          <p class="small text-muted mb-3">These GPS coordinates will be embedded into <strong>all</strong> uploaded images.</p>
 
-          <!-- Lat / Lng inputs -->
-          <div class="row g-2 mb-2">
+          <div class="row g-2 mb-3">
             <div class="col-6">
               <label for="lat-input" class="coord-label">Latitude</label>
               <input
@@ -91,7 +244,7 @@
                 step="any"
                 min="-90"
                 max="90"
-                aria-label="Latitude (decimal degrees, -90 to 90)"
+                aria-label="Latitude"
               />
               <div class="form-text">-90 to 90</div>
             </div>
@@ -105,22 +258,16 @@
                 step="any"
                 min="-180"
                 max="180"
-                aria-label="Longitude (decimal degrees, -180 to 180)"
+                aria-label="Longitude"
               />
               <div class="form-text">-180 to 180</div>
             </div>
           </div>
 
-          <!-- Geolocation button -->
-          <button
-            id="use-my-location"
-            type="button"
-            class="btn btn-outline-secondary btn-sm mb-1"
-          >
-            &#127759; Use My Location
+          <button id="use-my-location" type="button" class="btn btn-outline-secondary btn-sm mb-2">
+            <i data-lucide="locate"></i> Use My Location
           </button>
 
-          <!-- Map -->
           <div id="map" aria-label="Interactive map — click to set coordinates"></div>
           <p class="map-hint">Click anywhere on the map to set coordinates.</p>
         </div>
@@ -128,72 +275,210 @@
 
     </div><!-- /.row -->
 
-    <!-- ── Action bar ────────────────────────────────────────────────────── -->
-    <div id="action-bar">
-      <button
-        id="geotag-btn"
-        type="button"
-        class="btn btn-primary"
-        disabled
-        aria-disabled="true"
-      >
-        Geotag &amp; Download
-      </button>
-    </div>
-
-    <p class="text-center text-muted small mt-2">
-      Upload an image <strong>and</strong> set coordinates to enable the button.
-    </p>
-
-    <!-- ── Status area ───────────────────────────────────────────────────── -->
-    <div id="status-area" role="status" aria-live="polite"></div>
-
-    <!-- ── How it works ──────────────────────────────────────────────────── -->
-    <div class="row mt-5">
-      <div class="col-md-8 offset-md-2">
-        <div class="card border-0 bg-white">
-          <div class="card-body">
-            <h2 class="h6 fw-bold mb-3">How it works</h2>
-            <ol class="mb-0 small text-muted">
-              <li class="mb-1">Upload any image (JPEG, PNG, WebP, etc.).</li>
-              <li class="mb-1">Pick a location by clicking the map, using your device's GPS, or typing decimal coordinates manually.</li>
-              <li class="mb-1">Click <strong>Geotag &amp; Download</strong> — the GPS data is embedded directly into the image's EXIF metadata.</li>
-              <li>Download and open in any EXIF-aware app (Maps, Photos, online viewers) to see the location pin.</li>
-            </ol>
-            <p class="small text-muted mt-2 mb-0">
-              <strong>Privacy:</strong> All processing happens entirely in your browser. No image data is ever uploaded to a server.
+    <!-- ── Step 3: Set Filename ──────────────────────────────────────── -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="section-card">
+          <div class="section-title">
+            <span class="step-num">3</span>
+            Set Filename
+          </div>
+          <p class="small text-muted mb-3">
+            Optionally set a custom output filename <strong>per image</strong>.
+            Leave blank to use the original filename with <code>_geotagged</code> appended.
+          </p>
+          <div class="jpeg-notice">
+            <span class="jpeg-notice-icon"><i data-lucide="info"></i></span>
+            <span><strong>All images are saved as JPEG.</strong> JPEG is the only widely-supported format that carries GPS EXIF metadata. WebP and PNG do not carry this data.</span>
+          </div>
+          <div id="step3-rows">
+            <p class="text-muted small text-center py-3 mb-0">
+              Upload images in Step 1 to set filenames.
             </p>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- ── Action bar ────────────────────────────────────────────────────── -->
+    <div id="action-bar">
+      <button id="geotag-btn" type="button" class="btn btn-primary" disabled aria-disabled="true">
+        Geotag Images
+      </button>
+      <button id="download-all-btn" type="button" class="btn btn-success d-none">
+        <i data-lucide="download"></i> Download All
+      </button>
+    </div>
+
+    <p id="action-hint" class="text-center text-muted small mt-2">
+      Upload images <strong>and</strong> set coordinates to enable geotagging.
+    </p>
+
+    <!-- ── Status area ───────────────────────────────────────────────────── -->
+    <div id="status-area" role="status" aria-live="polite"></div>
+
+    <!-- ── Results ───────────────────────────────────────────────────────── -->
+    <div id="results-section" class="d-none mt-4">
+      <h2 class="h6 fw-bold mb-1">Geotagged Results</h2>
+      <p class="small text-muted mb-3">Review each image then download individually or all at once.</p>
+      <div id="results-grid" class="results-grid"></div>
+
+    </div>
+
+    <!-- ── Why use Geoify ───────────────────────────────────────────────── -->
+    <section class="features-section">
+      <div class="text-center mb-4">
+        <h2 class="section-heading">Why Geoify</h2>
+        <p class="text-muted small mb-0">
+          Free, private, and 100% browser-based — no subscription, ever.
+        </p>
+      </div>
+      <div class="features-grid">
+
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="gift"></i></div>
+          <div class="feature-title">100% Free Forever</div>
+          <p class="feature-desc">No subscription, no trial, no credit card. Unlimited use, always free.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="shield-check"></i></div>
+          <div class="feature-title">Completely Private</div>
+          <p class="feature-desc">Everything runs in your browser. Your images are never uploaded to any server — not even ours.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="user-x"></i></div>
+          <div class="feature-title">No Account Needed</div>
+          <p class="feature-desc">No sign-up, no login, no email. Open the page and start geotagging in seconds.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="map-pin"></i></div>
+          <div class="feature-title">GPS EXIF Embedding</div>
+          <p class="feature-desc">Embed precise GPS coordinates directly into JPEG EXIF metadata. The location data travels with the image.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="tag"></i></div>
+          <div class="feature-title">Custom Filenames</div>
+          <p class="feature-desc">Set a custom output filename for each image before downloading. Keep your files organized.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="layers"></i></div>
+          <div class="feature-title">Batch Processing</div>
+          <p class="feature-desc">Upload and geotag multiple images at once. Download individually or all in one click.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="image"></i></div>
+          <div class="feature-title">Multiple Format Support</div>
+          <p class="feature-desc">Upload JPEG, PNG, WebP, GIF, or BMP — all are exported as JPEG with GPS coordinates embedded in EXIF.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="locate"></i></div>
+          <div class="feature-title">Map or Manual Entry</div>
+          <p class="feature-desc">Click anywhere on an interactive map, use your device's GPS, or type latitude and longitude directly.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── FAQ Section ─────────────────────────────────────────────────────── -->
+    <section class="faq-section">
+      <div class="text-center mb-4">
+        <h2 class="section-heading">Frequently Asked Questions</h2>
+        <p class="text-muted small mb-0">Everything you need to know about Geoify.</p>
+      </div>
+      <div class="accordion faq-list" id="faq-accordion">
+
+        <div class="accordion-item faq-item">
+          <h3 class="accordion-header faq-q">
+            <button class="accordion-button faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-1" data-bs-parent="#faq-accordion">
+              What is image geotagging?
+            </button>
+          </h3>
+          <div id="faq-1" class="accordion-collapse collapse">
+            <div class="accordion-body faq-a">Image geotagging embeds GPS coordinates into a photo's EXIF metadata. This lets apps, devices, and platforms know where a photo was taken — the location data travels with the image file.</div>
+          </div>
+        </div>
+
+        <div class="accordion-item faq-item">
+          <h3 class="accordion-header faq-q">
+            <button class="accordion-button faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-2" data-bs-parent="#faq-accordion">
+              Why does Geoify save images as JPEG?
+            </button>
+          </h3>
+          <div id="faq-2" class="accordion-collapse collapse">
+            <div class="accordion-body faq-a">JPEG is the only widely-supported image format that carries GPS EXIF metadata. PNG uses a different metadata structure and WebP carries no EXIF data. Geoify converts all uploads to JPEG to ensure the GPS coordinates are correctly embedded and readable.</div>
+          </div>
+        </div>
+
+        <div class="accordion-item faq-item">
+          <h3 class="accordion-header faq-q">
+            <button class="accordion-button faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-3" data-bs-parent="#faq-accordion">
+              Are my images uploaded to a server?
+            </button>
+          </h3>
+          <div id="faq-3" class="accordion-collapse collapse">
+            <div class="accordion-body faq-a">No. All processing happens entirely in your browser using JavaScript. Your images never leave your device — nothing is sent to any server.</div>
+          </div>
+        </div>
+
+        <div class="accordion-item faq-item">
+          <h3 class="accordion-header faq-q">
+            <button class="accordion-button faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-4" data-bs-parent="#faq-accordion">
+              Is Geoify free to use?
+            </button>
+          </h3>
+          <div id="faq-4" class="accordion-collapse collapse">
+            <div class="accordion-body faq-a">Yes. Geoify is 100% free with no subscription, no account, no watermarks, and no file limits.</div>
+          </div>
+        </div>
+
+        <div class="accordion-item faq-item">
+          <h3 class="accordion-header faq-q">
+            <button class="accordion-button faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-5" data-bs-parent="#faq-accordion">
+              What image formats can I upload?
+            </button>
+          </h3>
+          <div id="faq-5" class="accordion-collapse collapse">
+            <div class="accordion-body faq-a">You can upload JPEG, PNG, WebP, GIF, and BMP files. All formats are converted to JPEG on download so that GPS EXIF data can be correctly embedded.</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Footer ───────────────────────────────────────────────────────── -->
+    <footer class="site-footer">
+      <p class="mb-2 text-muted small">Geoify is free to use. If it's been useful, consider supporting it:</p>
+      <script
+            type="text/javascript"
+            src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js"
+            data-name="bmc-button"
+            data-slug="KBEIsYq"
+            data-color="#FFDD00"
+            data-emoji="☕"
+            data-font="Cookie"
+            data-text="Buy me a coffee"
+            data-outline-color="#000000"
+            data-font-color="#000000"
+            data-coffee-color="#ffffff"
+          ></script>
+      <p class="mt-3 mb-0 text-muted" style="font-size:0.72rem;">Your images never leave your browser.</p>
+    </footer>
+
   </main>
 
   <!-- ── Scripts ───────────────────────────────────────────────────────────── -->
-
-  <!-- Bootstrap JS bundle (includes Popper) -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc4s9bIOgUxi8T/jzmL3MJj7/b/NLMIJNf6kYBqKfm"
-    crossorigin="anonymous"
-  ></script>
-
-  <!-- Leaflet JS -->
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WLEo="
-    crossorigin="anonymous"
-  ></script>
-
-  <!-- piexifjs — exposes window.piexif -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/piexifjs@1.0.6/piexif.js"
-    crossorigin="anonymous"
-  ></script>
-
-  <!-- App logic -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/piexifjs@1.0.6/piexif.js"></script>
   <script src="static/app.js"></script>
+  <script>lucide.createIcons();</script>
 
 </body>
 </html>

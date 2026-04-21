@@ -2,8 +2,8 @@
 
 // ── State ──────────────────────────────────────────────────────────────────
 const state = {
-  file: null,
-  imageDataUrl: null,
+  files: [],    // [{file, dataUrl}]
+  results: [],  // [{outputName, geotaggedDataUrl, originalType, outputBytes, lat, lng}]
   lat: null,
   lng: null,
   marker: null,
@@ -11,21 +11,26 @@ const state = {
 
 let map = null;
 
-// ── DOM refs (populated after DOMContentLoaded) ────────────────────────────
-let dropZone, fileInput, previewContainer, previewImg, fileInfo;
-let latInput, lngInput, geotagBtn, statusArea;
+// ── DOM refs ───────────────────────────────────────────────────────────────
+let dropZone, fileInput, imageQueue, queueCount, step3Rows;
+let latInput, lngInput, geotagBtn, downloadAllBtn;
+let statusArea, resultsSection, resultsGrid, actionHint;
 
 // ── Init ───────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  dropZone        = document.getElementById('drop-zone');
-  fileInput       = document.getElementById('file-input');
-  previewContainer = document.getElementById('preview-container');
-  previewImg      = document.getElementById('preview-img');
-  fileInfo        = document.getElementById('file-info');
-  latInput        = document.getElementById('lat-input');
-  lngInput        = document.getElementById('lng-input');
-  geotagBtn       = document.getElementById('geotag-btn');
-  statusArea      = document.getElementById('status-area');
+  dropZone      = document.getElementById('drop-zone');
+  fileInput     = document.getElementById('file-input');
+  imageQueue    = document.getElementById('image-queue');
+  queueCount    = document.getElementById('queue-count');
+  latInput      = document.getElementById('lat-input');
+  lngInput      = document.getElementById('lng-input');
+  geotagBtn     = document.getElementById('geotag-btn');
+  downloadAllBtn = document.getElementById('download-all-btn');
+  statusArea    = document.getElementById('status-area');
+  resultsSection = document.getElementById('results-section');
+  resultsGrid    = document.getElementById('results-grid');
+  actionHint     = document.getElementById('action-hint');
+  step3Rows      = document.getElementById('step3-rows');
 
   initMap();
   wireUpload();
@@ -38,20 +43,19 @@ document.addEventListener('DOMContentLoaded', () => {
 function initMap() {
   map = L.map('map').setView([20, 0], 2);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  // CARTO Voyager — free, no API key, works from file:// (no Referer required)
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
     maxZoom: 19,
   }).addTo(map);
 
-  map.on('click', (e) => {
-    setCoordinates(e.latlng.lat, e.latlng.lng);
-  });
+  map.on('click', (e) => setCoordinates(e.latlng.lat, e.latlng.lng));
 }
 
 function setCoordinates(lat, lng) {
   state.lat = lat;
   state.lng = lng;
-
   latInput.value = lat.toFixed(6);
   lngInput.value = lng.toFixed(6);
 
@@ -60,96 +64,104 @@ function setCoordinates(lat, lng) {
   } else {
     state.marker = L.marker([lat, lng]).addTo(map);
   }
-
-  // Zoom in (but not past current zoom if already zoomed in)
   map.setView([lat, lng], Math.max(map.getZoom(), 10));
   updateButtonState();
 }
 
 // ── Upload wiring ──────────────────────────────────────────────────────────
 function wireUpload() {
-  // Click on drop zone opens file picker
   dropZone.addEventListener('click', () => fileInput.click());
-
-  // Prevent click from bubbling if user clicks the browse link inside
   dropZone.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') fileInput.click();
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); }
   });
 
-  // Drag & drop
   dropZone.addEventListener('dragover', (e) => {
     e.preventDefault();
     dropZone.classList.add('drag-over');
   });
-
   dropZone.addEventListener('dragleave', (e) => {
-    if (!dropZone.contains(e.relatedTarget)) {
-      dropZone.classList.remove('drag-over');
-    }
+    if (!dropZone.contains(e.relatedTarget)) dropZone.classList.remove('drag-over');
   });
-
   dropZone.addEventListener('drop', (e) => {
     e.preventDefault();
     dropZone.classList.remove('drag-over');
-    const file = e.dataTransfer.files[0];
-    if (file) handleFile(file);
+    handleFiles(e.dataTransfer.files);
   });
 
-  // File input change
   fileInput.addEventListener('change', () => {
-    if (fileInput.files[0]) handleFile(fileInput.files[0]);
-    // Reset so same file can be re-selected
+    if (fileInput.files.length) handleFiles(fileInput.files);
     fileInput.value = '';
   });
 }
 
-function handleFile(file) {
-  if (!file.type.startsWith('image/')) {
-    showError('Please upload a valid image file (JPEG, PNG, WebP, etc.).');
+function handleFiles(fileList) {
+  const valid = Array.from(fileList).filter(f => f.type.startsWith('image/'));
+  const skipped = fileList.length - valid.length;
+
+  if (valid.length === 0) {
+    showError('No valid image files found. Please upload JPEG, PNG, WebP, GIF, or BMP.');
+    return;
+  }
+  if (skipped > 0) {
+    showWarning(`${skipped} non-image file${skipped !== 1 ? 's' : ''} skipped.`);
+  } else {
+    clearStatus();
+  }
+
+  hideResults();
+
+  let loaded = 0;
+  valid.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      state.files.push({ file, dataUrl: e.target.result, customName: '' });
+      loaded++;
+      if (loaded === valid.length) {
+        renderQueue();
+        renderStep3();
+        updateButtonState();
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// Called from inline onclick in queue cards
+function removeFromQueue(index) {
+  state.files.splice(index, 1);
+  renderQueue();
+  renderStep3();
+  updateButtonState();
+  if (state.files.length === 0) hideResults();
+}
+
+function renderQueue() {
+  if (state.files.length === 0) {
+    imageQueue.innerHTML = '<p class="text-muted small text-center py-2 mb-0">No images uploaded yet.</p>';
+    queueCount.textContent = '';
     return;
   }
 
-  state.file = file;
-  clearStatus();
+  queueCount.textContent = `${state.files.length} image${state.files.length !== 1 ? 's' : ''} ready`;
 
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    state.imageDataUrl = e.target.result;
-    showPreview(e.target.result, file);
+  imageQueue.innerHTML = state.files.map(({ file, dataUrl }, i) => {
+    const size = file.size > 1024 * 1024
+      ? `${(file.size / (1024 * 1024)).toFixed(1)} MB`
+      : `${(file.size / 1024).toFixed(0)} KB`;
+    const ext = file.type === 'image/jpeg'
+      ? 'JPEG'
+      : file.type.split('/')[1].toUpperCase();
 
-    // Warn for large images
-    const img = new Image();
-    img.onload = () => {
-      const pixels = img.naturalWidth * img.naturalHeight;
-      if (pixels > 16_000_000) {
-        showWarning(
-          `Large image detected (${(pixels / 1e6).toFixed(1)} MP). ` +
-          `Processing may be slow on some devices.`
-        );
-      }
-    };
-    img.src = e.target.result;
-
-    updateButtonState();
-  };
-  reader.readAsDataURL(file);
-}
-
-function showPreview(dataUrl, file) {
-  previewImg.src = dataUrl;
-  previewContainer.classList.remove('d-none');
-
-  const sizeKb = (file.size / 1024).toFixed(1);
-  const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
-  const displaySize = file.size > 1024 * 1024
-    ? `${sizeMb} MB`
-    : `${sizeKb} KB`;
-
-  const typeLabel = file.type === 'image/jpeg'
-    ? 'JPEG (no conversion needed)'
-    : `${file.type} → will be converted to JPEG`;
-
-  fileInfo.textContent = `${file.name}  ·  ${displaySize}  ·  ${typeLabel}`;
+    return `
+      <div class="queue-card">
+        <img class="queue-thumb" src="${dataUrl}" alt="${escapeHtml(file.name)}" />
+        <div class="queue-info">
+          <span class="queue-name" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</span>
+          <span class="queue-size">${ext} &middot; ${size}</span>
+        </div>
+        <button class="queue-remove" onclick="removeFromQueue(${i})" aria-label="Remove ${escapeHtml(file.name)}">&times;</button>
+      </div>`;
+  }).join('');
 }
 
 // ── Coordinate inputs ──────────────────────────────────────────────────────
@@ -167,11 +179,8 @@ function syncCoordsFromInputs() {
     updateButtonState();
     return;
   }
-  // Update state and move marker without triggering the full setCoordinates
-  // zoom behavior (let the user control zoom when typing manually)
   state.lat = lat;
   state.lng = lng;
-
   if (state.marker) {
     state.marker.setLatLng([lat, lng]);
     map.panTo([lat, lng]);
@@ -179,13 +188,13 @@ function syncCoordsFromInputs() {
     state.marker = L.marker([lat, lng]).addTo(map);
     map.setView([lat, lng], 10);
   }
-
   updateButtonState();
 }
 
 // ── Buttons ────────────────────────────────────────────────────────────────
 function wireButtons() {
   geotagBtn.addEventListener('click', handleGeotag);
+  downloadAllBtn.addEventListener('click', handleDownloadAll);
 
   document.getElementById('use-my-location').addEventListener('click', () => {
     if (!navigator.geolocation) {
@@ -200,45 +209,115 @@ function wireButtons() {
       (pos) => {
         setCoordinates(pos.coords.latitude, pos.coords.longitude);
         btn.disabled = false;
-        btn.textContent = 'Use My Location';
+        btn.innerHTML = '&#127759; Use My Location';
       },
       (err) => {
         showError(`Could not get location: ${err.message}`);
         btn.disabled = false;
-        btn.textContent = 'Use My Location';
+        btn.innerHTML = '&#127759; Use My Location';
       }
     );
   });
 }
 
 function updateButtonState() {
-  const ready = state.imageDataUrl !== null && isValidCoords(state.lat, state.lng);
+  const ready = state.files.length > 0 && isValidCoords(state.lat, state.lng);
   geotagBtn.disabled = !ready;
+  geotagBtn.setAttribute('aria-disabled', String(!ready));
 }
 
-// ── Geotag & Download ──────────────────────────────────────────────────────
+// ── Per-image SEO settings ─────────────────────────────────────────────────
+function slugify(str) {
+  return str.trim().toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+function buildOutputNameForFile(index) {
+  const item = state.files[index];
+  const custom = slugify(item.customName || '');
+  if (custom) return `${custom}.jpg`;
+  const base = item.file.name.replace(/\.[^/.]+$/, '');
+  return `${base}_geotagged.jpg`;
+}
+
+// Called from inline oninput in Step 3 rows
+function updateFileName(index, value) {
+  if (state.files[index]) state.files[index].customName = value;
+  updateRowPreview(index);
+}
+
+
+function updateRowPreview(index) {
+  const el = document.getElementById(`opt-preview-${index}`);
+  if (el) el.textContent = buildOutputNameForFile(index);
+}
+
+function renderStep3() {
+  if (state.files.length === 0) {
+    step3Rows.innerHTML = '<p class="text-muted small text-center py-3 mb-0">Upload images in Step 1 to set filenames.</p>';
+    return;
+  }
+
+  step3Rows.innerHTML = state.files.map(({ file, dataUrl, customName }, i) => `
+    <div class="opt-row${i > 0 ? ' opt-row-border' : ''}">
+      <img class="opt-thumb" src="${dataUrl}" alt="" />
+      <div class="opt-fields">
+        <p class="opt-original" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</p>
+        <div class="opt-inputs">
+          <div class="opt-input-group">
+            <label class="opt-label">Custom Filename (optional)</label>
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              placeholder="e.g. my-photo-name"
+              value="${escapeHtml(customName)}"
+              oninput="updateFileName(${i}, this.value)"
+            />
+          </div>
+        </div>
+        <div class="opt-preview">
+          Output filename: <code id="opt-preview-${i}">${escapeHtml(buildOutputNameForFile(i))}</code>
+        </div>
+      </div>
+    </div>`
+  ).join('');
+}
+
+// ── Geotag ─────────────────────────────────────────────────────────────────
 async function handleGeotag() {
-  if (!state.imageDataUrl) { showError('No image loaded.'); return; }
+  if (state.files.length === 0) { showError('No images loaded.'); return; }
   if (!isValidCoords(state.lat, state.lng)) { showError('Invalid or missing coordinates.'); return; }
 
   setProcessing(true);
   clearStatus();
+  hideResults();
 
   try {
-    // Step 1: ensure JPEG (converts PNG/WebP/etc. via canvas if needed)
-    const jpegDataUrl = await ensureJpeg(state.imageDataUrl);
+    const results = [];
 
-    // Step 2: embed GPS EXIF data
-    const geotaggedDataUrl = embedGpsExif(jpegDataUrl, state.lat, state.lng);
+    for (let i = 0; i < state.files.length; i++) {
+      const { file, dataUrl } = state.files[i];
+      const jpegDataUrl      = await ensureJpeg(dataUrl, 0.92);
+      const geotaggedDataUrl = embedGpsExif(jpegDataUrl, state.lat, state.lng);
+      const base64           = geotaggedDataUrl.split(',')[1];
 
-    // Step 3: build output filename and trigger download
-    const baseName = state.file.name.replace(/\.[^/.]+$/, '');
-    const outputName = `${baseName}_geotagged.jpg`;
-    triggerDownload(geotaggedDataUrl, outputName);
+      results.push({
+        outputName: buildOutputNameForFile(i),
+        geotaggedDataUrl,
+        originalType: file.type,
+        outputBytes: Math.round((base64.length * 3) / 4),
+        lat: state.lat,
+        lng: state.lng,
+      });
+    }
 
+    state.results = results;
+    renderResults();
     showSuccess(
-      `Done! "${outputName}" downloaded with GPS coordinates ` +
-      `${formatCoord(state.lat, 'lat')}, ${formatCoord(state.lng, 'lng')}.`
+      `${results.length} image${results.length !== 1 ? 's' : ''} geotagged successfully. Download below.`
     );
   } catch (err) {
     showError(`Processing failed: ${err.message}`);
@@ -248,12 +327,63 @@ async function handleGeotag() {
   }
 }
 
-// ── JPEG conversion (Canvas) ───────────────────────────────────────────────
-function ensureJpeg(dataUrl, quality = 0.92) {
-  // Already JPEG — return immediately (no conversion, no quality loss)
-  if (dataUrl.startsWith('data:image/jpeg')) {
-    return Promise.resolve(dataUrl);
+// ── Results ────────────────────────────────────────────────────────────────
+function renderResults() {
+  resultsGrid.innerHTML = state.results.map((r, i) => {
+    const size = r.outputBytes > 1024 * 1024
+      ? `${(r.outputBytes / (1024 * 1024)).toFixed(2)} MB`
+      : `${(r.outputBytes / 1024).toFixed(1)} KB`;
+    const formatLabel = r.originalType === 'image/jpeg'
+      ? 'JPEG'
+      : `${r.originalType.split('/')[1].toUpperCase()} → JPEG`;
+
+    return `
+      <div class="result-card">
+        <img class="result-thumb" src="${r.geotaggedDataUrl}" alt="${escapeHtml(r.outputName)}" />
+        <p class="result-name" title="${escapeHtml(r.outputName)}">${escapeHtml(r.outputName)}</p>
+        <dl class="result-dl">
+          <dt>Latitude</dt>  <dd>${escapeHtml(formatCoord(r.lat, 'lat'))}</dd>
+          <dt>Longitude</dt> <dd>${escapeHtml(formatCoord(r.lng, 'lng'))}</dd>
+          <dt>Output</dt>    <dd>${size}</dd>
+          <dt>Format</dt>    <dd>${formatLabel}</dd>
+        </dl>
+        <button class="btn btn-success btn-sm w-100 mt-auto" onclick="downloadResult(${i})">
+          <i data-lucide="download"></i> Download
+        </button>
+      </div>`;
+  }).join('');
+
+  resultsSection.classList.remove('d-none');
+  downloadAllBtn.classList.remove('d-none');
+  actionHint.classList.add('d-none');
+  if (window.lucide) lucide.createIcons();
+}
+
+function hideResults() {
+  resultsSection.classList.add('d-none');
+  downloadAllBtn.classList.add('d-none');
+  actionHint.classList.remove('d-none');
+  state.results = [];
+}
+
+
+// Called from inline onclick in result cards
+function downloadResult(index) {
+  const r = state.results[index];
+  if (r) triggerDownload(r.geotaggedDataUrl, r.outputName);
+}
+
+async function handleDownloadAll() {
+  for (let i = 0; i < state.results.length; i++) {
+    downloadResult(i);
+    // Small delay so the browser doesn't block simultaneous downloads
+    if (i < state.results.length - 1) await new Promise(res => setTimeout(res, 300));
   }
+}
+
+// ── JPEG conversion ────────────────────────────────────────────────────────
+function ensureJpeg(dataUrl, quality = 0.92) {
+  if (dataUrl.startsWith('data:image/jpeg')) return Promise.resolve(dataUrl);
 
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -262,12 +392,8 @@ function ensureJpeg(dataUrl, quality = 0.92) {
       canvas.width  = img.naturalWidth;
       canvas.height = img.naturalHeight;
       const ctx = canvas.getContext('2d');
-
-      // Fill white background first — essential for transparent PNGs
-      // (JPEG has no alpha channel; transparent areas become black without this)
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = '#ffffff'; // white bg for transparent PNGs
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-
       ctx.drawImage(img, 0, 0);
       resolve(canvas.toDataURL('image/jpeg', quality));
     };
@@ -276,46 +402,39 @@ function ensureJpeg(dataUrl, quality = 0.92) {
   });
 }
 
-// ── EXIF GPS embedding (piexifjs) ──────────────────────────────────────────
+// ── EXIF GPS embedding ─────────────────────────────────────────────────────
 function decimalToDmsRational(decimal) {
   const abs = Math.abs(decimal);
   const degrees = Math.floor(abs);
   const minutesFloat = (abs - degrees) * 60;
   const minutes = Math.floor(minutesFloat);
-  // Multiply seconds by 100 and round to get integer numerator (denominator=100)
-  // This gives ~1cm precision — standard camera EXIF format
   const secondsRational = Math.round((minutesFloat - minutes) * 60 * 100);
   return [[degrees, 1], [minutes, 1], [secondsRational, 100]];
 }
 
 function embedGpsExif(jpegDataUrl, lat, lng) {
   let exifObj;
-
   try {
-    // Load existing EXIF — preserves camera make/model, orientation, etc.
     exifObj = piexif.load(jpegDataUrl);
   } catch (_) {
-    // No EXIF present (or corrupt) — start with a fresh skeleton
     exifObj = { '0th': {}, 'Exif': {}, 'GPS': {}, 'Interop': {}, '1st': {} };
   }
 
-  // Overwrite only the GPS IFD — all other IFDs remain untouched
   exifObj['GPS'] = {
-    [piexif.TagValues.GPSIFD.GPSVersionID]:    [2, 3, 0, 0],
-    [piexif.TagValues.GPSIFD.GPSLatitudeRef]:  lat >= 0 ? 'N' : 'S',
-    [piexif.TagValues.GPSIFD.GPSLatitude]:     decimalToDmsRational(lat),
-    [piexif.TagValues.GPSIFD.GPSLongitudeRef]: lng >= 0 ? 'E' : 'W',
-    [piexif.TagValues.GPSIFD.GPSLongitude]:    decimalToDmsRational(lng),
+    [piexif.GPSIFD.GPSVersionID]:    [2, 3, 0, 0],
+    [piexif.GPSIFD.GPSLatitudeRef]:  lat >= 0 ? 'N' : 'S',
+    [piexif.GPSIFD.GPSLatitude]:     decimalToDmsRational(lat),
+    [piexif.GPSIFD.GPSLongitudeRef]: lng >= 0 ? 'E' : 'W',
+    [piexif.GPSIFD.GPSLongitude]:    decimalToDmsRational(lng),
   };
 
-  const exifBinary = piexif.dump(exifObj);
-  return piexif.insert(exifBinary, jpegDataUrl);
+  return piexif.insert(piexif.dump(exifObj), jpegDataUrl);
 }
 
 // ── Download trigger ───────────────────────────────────────────────────────
 function triggerDownload(dataUrl, filename) {
   const link = document.createElement('a');
-  link.href     = dataUrl;
+  link.href = dataUrl;
   link.download = filename;
   link.style.display = 'none';
   document.body.appendChild(link);
@@ -333,8 +452,9 @@ function isValidCoords(lat, lng) {
 
 function formatCoord(value, type) {
   const abs = Math.abs(value).toFixed(4);
-  if (type === 'lat') return `${abs}° ${value >= 0 ? 'N' : 'S'}`;
-  return `${abs}° ${value >= 0 ? 'E' : 'W'}`;
+  return type === 'lat'
+    ? `${abs}° ${value >= 0 ? 'N' : 'S'}`
+    : `${abs}° ${value >= 0 ? 'E' : 'W'}`;
 }
 
 function setProcessing(active) {
@@ -343,20 +463,18 @@ function setProcessing(active) {
     geotagBtn.innerHTML =
       '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Processing…';
   } else {
-    geotagBtn.innerHTML = 'Geotag &amp; Download';
+    geotagBtn.innerHTML = 'Geotag Images';
     updateButtonState();
   }
 }
 
 // ── Status messages ────────────────────────────────────────────────────────
-function clearStatus() {
-  statusArea.innerHTML = '';
-}
+function clearStatus() { statusArea.innerHTML = ''; }
 
 function showSuccess(msg) {
   statusArea.innerHTML =
     `<div class="alert alert-success alert-dismissible fade show" role="alert">
-      <strong>Success!</strong> ${escapeHtml(msg)}
+      <strong>Done!</strong> ${escapeHtml(msg)}
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>`;
 }
