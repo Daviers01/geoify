@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Geoify — Free Image Geotagging Tool</title>
-  <meta name="description" content="Geotag images online for free — embed GPS coordinates into JPEG EXIF metadata. No account. No watermarks. 100% browser-based." />
+  <title>Geotag Photos Online Free — Image Geotagging Tool | Geoify</title>
+  <meta name="description" content="Free online photo &amp; image geotagging tool — embed GPS coordinates into JPEG EXIF metadata. Add location to photos, geotag images online, batch process multiple files. No account. No watermarks. 100% browser-based." />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <meta name="robots" content="index, follow" />
   <meta name="google-site-verification" content="IfwXzIPV4_Pc59zwH6n7RIDQqZV1eYPA5fnpAogpXbQ" />
@@ -12,15 +12,19 @@
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Geoify — Free Image Geotagging Tool" />
-  <meta property="og:description" content="Free image geotagging tool. Embed GPS coordinates into EXIF metadata. No account. No watermarks. 100% browser-based." />
+  <meta property="og:title" content="Geotag Photos Online Free — Geoify" />
+  <meta property="og:description" content="Free online photo &amp; image geotagging tool. Embed GPS coordinates into JPEG EXIF metadata. No account. No watermarks. 100% browser-based." />
   <meta property="og:url" content="https://geoify.vercel.app/" />
   <meta property="og:site_name" content="Geoify" />
+  <meta property="og:image" content="https://geoify.vercel.app/og-image.svg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Geoify — Free Image Geotagging Tool" />
-  <meta name="twitter:description" content="Free image geotagging tool. Embed GPS coordinates into JPEG EXIF metadata. No account. No watermarks." />
+  <meta name="twitter:title" content="Geotag Photos Online Free — Geoify" />
+  <meta name="twitter:description" content="Free online photo &amp; image geotagging tool. Embed GPS coordinates into JPEG EXIF metadata. No account. No watermarks." />
+  <meta name="twitter:image" content="https://geoify.vercel.app/og-image.svg" />
 
   <!-- JSON-LD: SoftwareApplication -->
   <script type="application/ld+json">
@@ -57,6 +61,80 @@
       "name": "Geoify",
       "url": "https://geoify.vercel.app/"
     }
+  }
+  </script>
+
+  <!-- JSON-LD: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is image geotagging?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Image geotagging is the process of embedding GPS coordinates into a photo's EXIF metadata. This lets apps, devices, and platforms know exactly where a photo was taken. The location data is stored invisibly inside the image file and travels with it wherever it goes — whether you share it, upload it, or archive it."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I add GPS coordinates to a JPEG online?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "With Geoify you can add GPS coordinates to any JPEG in three steps: upload your photo, click your location on the interactive map (or type the latitude and longitude), then click Geotag Images and download. The GPS data is written into the EXIF metadata of the JPEG file — no software to install, no account required."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I geotag multiple photos at once?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Geoify supports batch geotagging — upload as many images as you need in one go, set a single location, and all images will have the same GPS coordinates embedded. You can then download them individually or all at once with a single click."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why does Geoify save images as JPEG?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "JPEG is the only widely-supported image format that carries GPS EXIF metadata. PNG uses a different metadata structure that most tools ignore, and WebP carries no EXIF data at all. Geoify converts all uploads to JPEG so the GPS coordinates are correctly embedded and readable by any app or platform that supports EXIF."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is EXIF metadata?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "EXIF (Exchangeable Image File Format) is a standard for storing metadata inside image files. It captures information like the date and time a photo was taken, camera settings (ISO, aperture, shutter speed), device model, and — when available — GPS coordinates. Most smartphones automatically embed EXIF data when you take a photo. Geoify lets you manually add or overwrite the GPS portion of that data."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are my images uploaded to a server?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Geoify is 100% browser-based. All image processing happens locally in your browser using JavaScript — your photos never leave your device and are never sent to any server. This makes it safe to use with sensitive or private images."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Geoify free to use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Geoify is completely free with no subscription, no account, no watermarks, and no file limits. There are no paid tiers — all features are available to everyone for free."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What image formats can I upload?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can upload JPEG, PNG, WebP, GIF, and BMP files. Geoify accepts any common image format and converts everything to JPEG on download so that GPS EXIF data can be correctly embedded and read by other tools and platforms."
+        }
+      }
+    ]
   }
   </script>
 
@@ -101,10 +179,10 @@
         <div class="header-brand">
           <div class="header-logo-row">
             <span class="header-pin"><i data-lucide="map-pin"></i></span>
-            <h1>Geoify: Free Image Geotagging Tool</h1>
+            <h1>Geoify: Free Online Photo &amp; Image Geotagging Tool</h1>
             <span class="badge-free">FREE</span>
           </div>
-          <p class="header-tagline">Embed GPS coordinates into JPEG EXIF metadata — free, private, and 100% browser-based.</p>
+          <p class="header-tagline">Add GPS coordinates to photos online, free — embed location into JPEG EXIF metadata, geotag images in seconds, batch process multiple files. No software to install.</p>
           <p class="header-sub">
             No subscription &nbsp;&middot;&nbsp; No account &nbsp;&middot;&nbsp;
             No watermarks &nbsp;&middot;&nbsp; Your images never leave your browser
@@ -337,9 +415,9 @@
     <!-- ── Why use Geoify ───────────────────────────────────────────────── -->
     <section class="features-section">
       <div class="text-center mb-4">
-        <h2 class="section-heading">Why Geoify</h2>
+        <h2 class="section-heading">Why Use a Free Online Image Geotagging Tool</h2>
         <p class="text-muted small mb-0">
-          Free, private, and 100% browser-based — no subscription, ever.
+          Geoify is free, private, and 100% browser-based — no subscription, no software to install, ever.
         </p>
       </div>
       <div class="features-grid">
@@ -399,7 +477,7 @@
     <section class="faq-section">
       <div class="text-center mb-4">
         <h2 class="section-heading">Frequently Asked Questions</h2>
-        <p class="text-muted small mb-0">Everything you need to know about Geoify.</p>
+        <p class="text-muted small mb-0">Everything you need to know about geotagging photos and images online.</p>
       </div>
       <div class="accordion faq-list" id="faq-accordion">
 
@@ -410,51 +488,84 @@
             </button>
           </h3>
           <div id="faq-1" class="accordion-collapse collapse">
-            <div class="accordion-body faq-a">Image geotagging embeds GPS coordinates into a photo's EXIF metadata. This lets apps, devices, and platforms know where a photo was taken — the location data travels with the image file.</div>
+            <div class="accordion-body faq-a">Image geotagging is the process of embedding GPS coordinates into a photo's EXIF metadata. This lets apps, devices, and platforms know exactly where a photo was taken. The location data is stored invisibly inside the image file and travels with it wherever it goes — whether you share it, upload it, or archive it.</div>
           </div>
         </div>
 
         <div class="accordion-item faq-item">
           <h3 class="accordion-header faq-q">
             <button class="accordion-button faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-2" data-bs-parent="#faq-accordion">
-              Why does Geoify save images as JPEG?
+              How do I add GPS coordinates to a JPEG online?
             </button>
           </h3>
           <div id="faq-2" class="accordion-collapse collapse">
-            <div class="accordion-body faq-a">JPEG is the only widely-supported image format that carries GPS EXIF metadata. PNG uses a different metadata structure and WebP carries no EXIF data. Geoify converts all uploads to JPEG to ensure the GPS coordinates are correctly embedded and readable.</div>
+            <div class="accordion-body faq-a">With Geoify you can add GPS coordinates to any JPEG in three steps: upload your photo, click your location on the interactive map (or type the latitude and longitude manually), then click <strong>Geotag Images</strong> and download. The GPS data is written directly into the EXIF metadata of the JPEG file — no software to install, no account required.</div>
           </div>
         </div>
 
         <div class="accordion-item faq-item">
           <h3 class="accordion-header faq-q">
             <button class="accordion-button faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-3" data-bs-parent="#faq-accordion">
-              Are my images uploaded to a server?
+              Can I geotag multiple photos at once?
             </button>
           </h3>
           <div id="faq-3" class="accordion-collapse collapse">
-            <div class="accordion-body faq-a">No. All processing happens entirely in your browser using JavaScript. Your images never leave your device — nothing is sent to any server.</div>
+            <div class="accordion-body faq-a">Yes. Geoify supports batch geotagging — upload as many images as you need in one go, set a single location on the map, and every image will have the same GPS coordinates embedded. You can then download them individually or all at once with a single click. There is no file limit.</div>
           </div>
         </div>
 
         <div class="accordion-item faq-item">
           <h3 class="accordion-header faq-q">
             <button class="accordion-button faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-4" data-bs-parent="#faq-accordion">
-              Is Geoify free to use?
+              Why does Geoify save images as JPEG?
             </button>
           </h3>
           <div id="faq-4" class="accordion-collapse collapse">
-            <div class="accordion-body faq-a">Yes. Geoify is 100% free with no subscription, no account, no watermarks, and no file limits.</div>
+            <div class="accordion-body faq-a">JPEG is the only widely-supported image format that carries GPS EXIF metadata. PNG uses a different metadata structure that most tools ignore, and WebP carries no EXIF data at all. Geoify converts all uploads to JPEG so the GPS coordinates are correctly embedded and readable by any app or platform that supports EXIF.</div>
           </div>
         </div>
 
         <div class="accordion-item faq-item">
           <h3 class="accordion-header faq-q">
             <button class="accordion-button faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-5" data-bs-parent="#faq-accordion">
-              What image formats can I upload?
+              What is EXIF metadata?
             </button>
           </h3>
           <div id="faq-5" class="accordion-collapse collapse">
-            <div class="accordion-body faq-a">You can upload JPEG, PNG, WebP, GIF, and BMP files. All formats are converted to JPEG on download so that GPS EXIF data can be correctly embedded.</div>
+            <div class="accordion-body faq-a">EXIF (Exchangeable Image File Format) is a standard for storing metadata inside image files. It captures information like the date and time a photo was taken, camera settings (ISO, aperture, shutter speed), device model, and — when available — GPS coordinates. Most smartphones automatically embed EXIF data when you take a photo. Geoify lets you manually add or overwrite the GPS portion of that data.</div>
+          </div>
+        </div>
+
+        <div class="accordion-item faq-item">
+          <h3 class="accordion-header faq-q">
+            <button class="accordion-button faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-6" data-bs-parent="#faq-accordion">
+              Are my images uploaded to a server?
+            </button>
+          </h3>
+          <div id="faq-6" class="accordion-collapse collapse">
+            <div class="accordion-body faq-a">No. Geoify is 100% browser-based. All image processing happens locally in your browser using JavaScript — your photos never leave your device and are never sent to any server. This makes it safe to use with sensitive or private images.</div>
+          </div>
+        </div>
+
+        <div class="accordion-item faq-item">
+          <h3 class="accordion-header faq-q">
+            <button class="accordion-button faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-7" data-bs-parent="#faq-accordion">
+              Is Geoify free to use?
+            </button>
+          </h3>
+          <div id="faq-7" class="accordion-collapse collapse">
+            <div class="accordion-body faq-a">Yes. Geoify is completely free with no subscription, no account, no watermarks, and no file limits. There are no paid tiers — all features are available to everyone for free.</div>
+          </div>
+        </div>
+
+        <div class="accordion-item faq-item">
+          <h3 class="accordion-header faq-q">
+            <button class="accordion-button faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-8" data-bs-parent="#faq-accordion">
+              What image formats can I upload?
+            </button>
+          </h3>
+          <div id="faq-8" class="accordion-collapse collapse">
+            <div class="accordion-body faq-a">You can upload JPEG, PNG, WebP, GIF, and BMP files. Geoify accepts any common image format and converts everything to JPEG on download so that GPS EXIF data can be correctly embedded and read by other tools and platforms.</div>
           </div>
         </div>
 
@@ -483,7 +594,7 @@
   </main>
 
   <!-- ── Scripts ───────────────────────────────────────────────────────────── -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/piexifjs@1.0.6/piexif.js"></script>
   <script src="static/app.js"></script>

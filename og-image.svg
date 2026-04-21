@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E0B3C"/>
+      <stop offset="100%" stop-color="#2D1464"/>
+    </linearGradient>
+    <linearGradient id="pin" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid dots -->
+  <pattern id="dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+    <circle cx="20" cy="20" r="1" fill="rgba(255,255,255,0.05)"/>
+  </pattern>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+
+  <!-- Map pin icon -->
+  <g transform="translate(140, 220)">
+    <path d="M55 0C36.2 0 21 15.2 21 34c0 25.5 34 72 34 72s34-46.5 34-72C89 15.2 73.8 0 55 0z" fill="url(#pin)"/>
+    <circle cx="55" cy="34" r="13" fill="#ffffff"/>
+  </g>
+
+  <!-- Geoify wordmark -->
+  <text x="260" y="295" font-family="-apple-system, 'Inter', BlinkMacSystemFont, sans-serif" font-size="88" font-weight="800" fill="#ffffff" letter-spacing="-3">Geoify</text>
+
+  <!-- FREE badge -->
+  <rect x="260" y="320" width="80" height="28" rx="14" fill="url(#pin)"/>
+  <text x="300" y="339" font-family="-apple-system, 'Inter', sans-serif" font-size="13" font-weight="800" fill="#ffffff" text-anchor="middle" letter-spacing="1">FREE</text>
+
+  <!-- Tagline -->
+  <text x="260" y="400" font-family="-apple-system, 'Inter', sans-serif" font-size="32" font-weight="400" fill="rgba(255,255,255,0.7)" letter-spacing="-0.5">Free online image geotagging tool</text>
+  <text x="260" y="442" font-family="-apple-system, 'Inter', sans-serif" font-size="32" font-weight="400" fill="rgba(255,255,255,0.7)" letter-spacing="-0.5">Embed GPS coordinates into JPEG EXIF metadata</text>
+
+  <!-- Divider -->
+  <line x1="260" y1="476" x2="940" y2="476" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+
+  <!-- Feature pills -->
+  <text x="260" y="510" font-family="-apple-system, 'Inter', sans-serif" font-size="22" fill="rgba(255,255,255,0.45)" letter-spacing="0">No account &nbsp;·&nbsp; No watermarks &nbsp;·&nbsp; 100% browser-based &nbsp;·&nbsp; Batch processing</text>
+
+  <!-- URL -->
+  <text x="260" y="568" font-family="-apple-system, 'Inter', sans-serif" font-size="22" fill="rgba(255,255,255,0.25)">geoify.vercel.app</text>
+</svg>
