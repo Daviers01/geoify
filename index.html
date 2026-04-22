@@ -160,14 +160,16 @@
     crossorigin="anonymous"
   />
 
-  <!-- Leaflet CSS -->
-  <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" />
+  <!-- Preconnect to CDNs to speed up asset loading -->
+  <link rel="preconnect" href="https://unpkg.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+
+  <!-- Leaflet CSS (Deferred) -->
+  <link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" /></noscript>
 
   <!-- Custom styles -->
   <link href="static/style.css" rel="stylesheet" />
-
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
 
@@ -595,10 +597,10 @@
 
   <!-- ── Scripts ───────────────────────────────────────────────────────────── -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/piexifjs@1.0.6/piexif.js"></script>
-  <script src="static/app.js"></script>
-  <script>lucide.createIcons();</script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/piexifjs@1.0.6/piexif.js" defer></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+  <script src="static/app.js" defer></script>
 
 </body>
 </html>

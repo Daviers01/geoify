@@ -18,6 +18,8 @@ let statusArea, resultsSection, resultsGrid, actionHint;
 
 // ── Init ───────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  if (window.lucide) lucide.createIcons();
+
   dropZone      = document.getElementById('drop-zone');
   fileInput     = document.getElementById('file-input');
   imageQueue    = document.getElementById('image-queue');
@@ -44,7 +46,7 @@ function initMap() {
   map = L.map('map').setView([20, 0], 2);
 
   // CARTO Voyager — free, no API key, works from file:// (no Referer required)
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
     subdomains: 'abcd',
     maxZoom: 19,
